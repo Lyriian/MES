@@ -6,4 +6,5 @@ Despite having multiple monitors on my desktop I often find myself without enoug
 # Hardware Diagram
 ![image](https://user-images.githubusercontent.com/2941745/160225525-d3e4e846-bf26-4341-abd1-50667cf58d89.png)
 
-# Heirarcy of control
+# Software Diagram
+![image](https://user-images.githubusercontent.com/2941745/160248096-4a5f606a-2c58-4992-ad0a-55a40a709383.png)
