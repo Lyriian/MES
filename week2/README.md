@@ -13,3 +13,5 @@ Assignment was to investigate both the board we intend to use for our final proj
 anywhere? (Try Digikey, Mouser, Octopart, Google, and so on.)
 
 We were also asked to take a look at some of the application notes for the boards.
+
+The board I will be using for my final project is the STM32F429I-DISC1 and the board I was assigned for the project was the MIMXRT1060-EVK and a markdown file for each is included here.
