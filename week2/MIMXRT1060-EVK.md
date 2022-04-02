@@ -8,7 +8,7 @@
 | Processor Family  | ARM-Cortex-M7  |
 | Flash  | 128KB  |
 | RAM  | 1MB total - 512 KB OCRAM shared between ITCM/DTCM and OCRAM, Dedicated 512 KB OCRAM  |
-| External Memory | 64MB HyperFlash, 8MB QSPI Flash  |
+| External Memory | 512MB HyperFlash, 64MB QSPI Flash  |
 | ADC  | 2 x 16 channel, 12 bit  |
 | Peripherals  | Micro SDHC connector, 24 pin FPC camera interface, 10/100baseT ethernet via RJ45, 2 x USB2.0 OTG controllers, Arduino interface headers  |
 | Dev board price  | $99 from NXP  |
