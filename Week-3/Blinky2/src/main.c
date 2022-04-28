@@ -36,6 +36,7 @@ int main(void)
 
     while (1)
     {
+
             if (HAL_GPIO_ReadPin(GPIOA, USER_BUTTON_PIN))
             {
                HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN | RED_LED_PIN);
