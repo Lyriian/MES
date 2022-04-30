@@ -106,7 +106,7 @@ static eCommandResult_T ConsoleCommandTime(const char buffer[])
 {
     eCommandResult_T result = COMMAND_SUCCESS;
 
-    ConsoleIoSendString("the time is 1:54AM");
+    ConsoleIoSendString("In theory this would pull the system time from your PC");
     ConsoleIoSendString(STR_ENDLINE);
     return result;
 }
