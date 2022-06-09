@@ -1,0 +1,7 @@
+{
+    "cmake.configureEnvironment": {
+        "PICO_SDK_PATH": "C:\\Users\\holdy\\Downloads\\pico-sdk"
+    },
+    "cmake.generator": "NMake Makefiles",
+    "C_Cpp.errorSquiggles": "Disabled"
+}
