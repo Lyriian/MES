@@ -1,14 +1,5 @@
-/**
-  ******************************************************************************************** 
-  *@file   : STM32F407_I2C_LCD16x02_Driver.h
-  *@author : Sharath N
-  *@brief  : LCD driver header file
-  ********************************************************************************************
-*/	
-
-
-#ifndef STM32F407_I2C_LCD16X02_DRIVER_H
-#define STM32F407_I2C_LCD16X02_DRIVER_H
+#ifndef I2C_LCD16X02_H
+#define I2C_LCD16X02_H
 
 #include "stdint.h"
 #include "main.h"

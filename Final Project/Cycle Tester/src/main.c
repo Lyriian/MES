@@ -1,6 +1,6 @@
 #include "main.h"
 #include "console.h"
-#include "STM32F407_I2C_LCD16x02_Driver.h"
+#include "I2C_LCD16x02.h"
 
 /* Pin Definitions */
 #define MOTOR_PIN_FORWARD GPIO_PIN_5

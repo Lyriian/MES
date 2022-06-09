@@ -1,14 +1,5 @@
-/**
-  ******************************************************************************************** 
-  *@file   : STM32F407_I2C_LCD16x02_Driver.c
-  *@author : Sharath N
-  *@brief  : LCD driver source file for interfacing 16x02 LCD on STM32Fxx MCU using I2C Serial 
-	         Interface Module 
-  ********************************************************************************************
-*/	
-
 #include "stm32f4xx_hal.h"
-#include "STM32F407_I2C_LCD16x02_Driver.h"
+#include "I2C_LCD16x02.h"
 
 /* I2C Handle */
 I2C_HandleTypeDef myI2Chandle;
