@@ -23,6 +23,7 @@ void CycleTest(void);
 void Encoder(void);
 void Encoder_GPIO_Init();
 void Encoder_Init_Tim2();
+void Direction();
 
 uint32_t cycles = 0;
 char MSG[100] = {'\0'};
@@ -54,7 +55,7 @@ int main(void) {
   while(1) {
     //ConsoleProcess();
     //CycleTest();
-    Encoder();
+    Direction();
     
     //HAL_Delay(100);
   }
@@ -99,6 +100,30 @@ void Encoder(){
     LCD_Send_String_On_Line2("test");
   }
   HAL_Delay(100);
+}
+
+void Direction(){
+  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_RESET)  // If the OUTA is RESET
+	  {
+		  if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) == GPIO_PIN_RESET)  // If OUTB is also reset... CCK
+		  {
+			  while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) == GPIO_PIN_RESET){};  // wait for the OUTB to go high
+			  LCD_Send_Cmd(LCD_CLEAR_DISPLAY);
+        LCD_Send_String("Reverse");
+			  while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_RESET){};  // wait for the OUTA to go high
+			  HAL_Delay (10);  // wait for some more time
+		  }
+
+		  else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) == GPIO_PIN_SET)  // If OUTB is also set
+		  {
+			  while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) == GPIO_PIN_SET){};  // wait for the OUTB to go LOW.. CK
+			  LCD_Send_Cmd(LCD_CLEAR_DISPLAY);
+        LCD_Send_String("Forward");
+			  while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_RESET){};  // wait for the OUTA to go high
+			  while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) == GPIO_PIN_RESET){};  // wait for the OUTB to go high
+			  HAL_Delay (10);  // wait for some more time
+		  }
+	  }
 }
 
 /* configure the motor GPIOs */
