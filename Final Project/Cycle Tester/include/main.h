@@ -26,6 +26,6 @@
 /* Exported functions ------------------------------------------------------- */
 int getCycleCount();
 int PinState();
-
+int timer();
 
 #endif /* __MAIN_H */

@@ -21,6 +21,7 @@ static eCommandResult_T ConsoleCommandHelp(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[]);
 static eCommandResult_T ConsoleCommandCycles(const char buffer[]);
+static eCommandResult_T ConsoleCommandTimer(const char buffer[]);
 
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
@@ -31,6 +32,7 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
     {"int", &ConsoleCommandParamExampleInt16, HELP("How to get a signed int16 from params list: int -321")},
     {"u16h", &ConsoleCommandParamExampleHexUint16, HELP("How to get a hex u16 from the params list: u16h aB12")},
     {"cycles", &ConsoleCommandCycles, HELP("check the number of system cycles")},
+	{"timer", &ConsoleCommandTimer, HELP("check encoder ticks")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
@@ -110,10 +112,21 @@ static eCommandResult_T ConsoleCommandCycles(const char buffer[])
 
     IGNORE_UNUSED_VARIABLE(buffer);
 	//int cycles = getCycleCount();
-	int state = PinState();
+	int state = getCycleCount();
 	ConsoleIoSendString("cycle count ");
 	ConsoleSendParamInt32(state);
 	ConsoleIoSendString(STR_ENDLINE);
+	return result;
+}
+
+static eCommandResult_T ConsoleCommandTimer(const char buffer[])
+{
+	eCommandResult_T result = COMMAND_SUCCESS;
+
+    IGNORE_UNUSED_VARIABLE(buffer);
+		uint32_t MSG = timer();
+		ConsoleSendString("Encoder ticks = ");
+		ConsoleSendParamInt32(MSG);
 	return result;
 }
 
