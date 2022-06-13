@@ -11,12 +11,17 @@
 #define MOTOR_PIN_REVERSE GPIO_PIN_4
 #define MOTOR_PORT GPIOD
 
+#define E_STOP_PIN GPIO_PIN_0
+#define E_STOP_PORT GPIOA
+
 /* clocks */
 #define MOTOR_GPIO_CLK_ENABLE() __HAL_RCC_GPIOD_CLK_ENABLE()
  
 void MOTOR_Init(void);
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+void E_STOP_Init();
+void EXTI0_Callback(uint16_t E_STOP);
 void SystemClock_Config(void);
+static void MX_NVIC_Init();
 void Error_Handler(void);
 void LCD_Init(void);
 void CycleTest(void);
@@ -35,16 +40,17 @@ uint32_t cyclelimit = 10000;
 uint32_t push = 5000;
 uint32_t pull = 5000;
 
-
 int main(void) {
 
   HAL_Init();
 
   // Setup motor and dev board button
   MOTOR_Init();
+  E_STOP_Init();
 
   // Configure system timer
   SystemClock_Config();
+  MX_NVIC_Init();
   // Configure LCD
   LCD_Init();
 
@@ -171,7 +177,6 @@ void CycleLimit(){
 
 }
 
-
 //this function will cycle the motor once
 //this was for testing and will be removed later
 void CycleTest(){
@@ -211,7 +216,6 @@ void Encoder(){
   HAL_Delay(100); 
 }
 
-
 // Function will test direction you are turning the encoder and display it on LCD
 // this function was just for testing and will likely be removed
 void Direction(){
@@ -248,6 +252,16 @@ void MOTOR_Init(){
     HAL_GPIO_Init(MOTOR_PORT, &GPIO_InitStruct);
 }
 
+void E_STOP_Init(){
+  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitStruct.Pin = E_STOP_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(E_STOP_PORT, &GPIO_InitStruct);
+
+}
+
 /* function to read pin state for console */
 int PinState(){
   return HAL_GPIO_ReadPin(MOTOR_PORT, MOTOR_PIN_FORWARD | MOTOR_PIN_REVERSE);
@@ -275,6 +289,25 @@ int* getParameters(){
   return (param) ;
 }
 
+void EXTI0_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(E_STOP_PIN);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t E_STOP)
+{
+  if(E_STOP == E_STOP_PIN){
+    while(1){
+      LCD_Send_String_On_Line1("ESTOP pressed");
+      LCD_Send_String_On_Line2("reset board");
+      HAL_GPIO_WritePin(MOTOR_PORT, MOTOR_PIN_FORWARD, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(MOTOR_PORT, MOTOR_PIN_REVERSE, GPIO_PIN_RESET);
+      
+    }
+  }
+}
+
+//Everything below here is auto gen stuff from cubeIDE
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -315,6 +348,14 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+static void MX_NVIC_Init(void)
+{
+  /* EXTI0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+  
 }
 
 void Error_Handler(void)

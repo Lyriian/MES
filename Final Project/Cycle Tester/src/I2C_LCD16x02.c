@@ -1,3 +1,10 @@
+/**
+  ******************************************************************************************** 
+  *@file   : STM32F407_I2C_LCD16x02_Driver.h
+  *@author : Sharath N
+  *@brief  : LCD driver header file
+  ********************************************************************************************
+*/	
 #include "stm32f4xx_hal.h"
 #include "I2C_LCD16x02.h"
 
@@ -27,7 +34,6 @@ static void GPIO_Config(void)
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 	
 }
-
 
 /*Configure I2C Peripheral */
 static void I2C_Config(void)
