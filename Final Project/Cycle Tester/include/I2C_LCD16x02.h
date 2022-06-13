@@ -28,70 +28,15 @@
 #define LCD_MOVE_DISPLAY_LEFT  0x18 
 #define LCD_MOVE_DISPLAY_RIGHT 0x1C 
 
-/**
- * @brief  Initializes LCD
- * @param  None
- * @retval None
- */
+
 void LCD_Init(void);
-
-/**
- * @brief Send Command to LCD
- * @param cmd : LCD commands 
- * @retval None
- */
 void LCD_Send_Cmd(uint8_t cmd);
-
-/**
- * @brief Send Data to LCD
- * @param data: Data to be sent to LCD
- * @retval None
- */
 void LCD_Send_Data(uint8_t data);
-
-
-/**
- * @brief Send Strings to LCD
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String(char *str);
-
-
-/**
- * @brief Clears screen first, then displays the given string
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Clear_Then_Display(char *str);
-
-
-
-/**
- * @brief Display the strings on Line1
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String_On_Line1(char *str);
-
-
-/**
- * @brief Display the strings on Line2
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String_On_Line2(char *str);
-
-
-/**
- * @brief Display long messages of any size on LCD
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Display_Long_Message(char *string);
-
-
-
 
 #endif
 

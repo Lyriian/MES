@@ -27,5 +27,5 @@
 int getCycleCount();
 int PinState();
 int timer();
-
+int* getParameters();
 #endif /* __MAIN_H */

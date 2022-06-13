@@ -22,6 +22,7 @@ static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[]);
 static eCommandResult_T ConsoleCommandCycles(const char buffer[]);
 static eCommandResult_T ConsoleCommandTimer(const char buffer[]);
+static eCommandResult_T ConsoleCommandParameters(const char buffer[]);
 
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
@@ -33,6 +34,7 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
     {"u16h", &ConsoleCommandParamExampleHexUint16, HELP("How to get a hex u16 from the params list: u16h aB12")},
     {"cycles", &ConsoleCommandCycles, HELP("check the number of system cycles")},
 	{"timer", &ConsoleCommandTimer, HELP("check encoder ticks")},
+	{"Parameters", &ConsoleCommandParameters, HELP("lists current test parameters")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
@@ -128,6 +130,26 @@ static eCommandResult_T ConsoleCommandTimer(const char buffer[])
 		ConsoleSendString("Encoder ticks = ");
 		ConsoleSendParamInt32(MSG);
 	return result;
+}
+
+static eCommandResult_T ConsoleCommandParameters(const char buffer[])
+{
+	eCommandResult_T result = COMMAND_SUCCESS;
+
+	IGNORE_UNUSED_VARIABLE(buffer);
+
+	int cyclelimit, push, pull;
+	int *param = getParameters();
+	cyclelimit = param[0];
+	push = param[1];
+	pull = param[2];
+
+	ConsoleIoSendString("limit = ");
+	ConsoleSendParamInt32(cyclelimit);
+	ConsoleIoSendString(" Push = ");
+	ConsoleSendParamInt32(push);
+	ConsoleIoSendString(" Pull = ");
+	ConsoleSendParamInt32(pull);
 }
 
 const sConsoleCommandTable_T* ConsoleCommandsGetTable(void)

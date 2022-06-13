@@ -3,17 +3,17 @@
 #include "encoder.h"
 #include "I2C_LCD16x02.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 
-/* Pin Definitions, I realize now these are redundant unless you really just want a more friendly name for the Pins and ports */
+/* Pin Definitions */
 #define MOTOR_PIN_FORWARD GPIO_PIN_5
 #define MOTOR_PIN_REVERSE GPIO_PIN_4
 #define MOTOR_PORT GPIOD
 
 /* clocks */
 #define MOTOR_GPIO_CLK_ENABLE() __HAL_RCC_GPIOD_CLK_ENABLE()
-
-// IDK, it's like initializing functions of whatever
+ 
 void MOTOR_Init(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void SystemClock_Config(void);
@@ -29,10 +29,13 @@ void Push();
 void Pull();
 void CycleLimit();
 
+// default test parameters are set here
 uint32_t cycles = 0;
-int cyclelimit = 20;
-int push = 5000;
-int pull = 5000;
+uint32_t cyclelimit = 10000;
+uint32_t push = 5000;
+uint32_t pull = 5000;
+
+
 int main(void) {
 
   HAL_Init();
@@ -57,16 +60,22 @@ int main(void) {
   TIM2->EGR = 1;
   TIM2->CR1 = 1;
   
-  
-  char LCDMENU[][20] = {"Start       ", "Push time   ", "Pull time   ", "Cycle limit  "};
+  // Create the main menu
+  char LCDMENU[][20] = {"Start test      ", "Push time       ", "Pull time       ", "Cycle limit     "};
+  // Set where to start in the menu
   int MenuPos = 0;
+
+  //main loop that the user will interact with
   while(1) {
+    ConsoleProcess();
     LCD_Send_String_On_Line1(LCDMENU[MenuPos]);
     MenuPos = (TIM2->CNT)/4;
     if ((TIM2->CNT)/4 > 3){
       MenuPos = 3;
       TIM2->CNT = 0;
     }
+
+    //GPIO 7 is the encoder switch, I should probably name my pins
     if (HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_7) == GPIO_PIN_RESET){
       switch(MenuPos){
         case 0:
@@ -87,13 +96,15 @@ int main(void) {
         case 3:
           CycleLimit();
           LCD_Send_Cmd(LCD_CLEAR_DISPLAY);
-          HAL_Delay(50);
+          HAL_Delay(500);
           break;
       }
     }
   }
 
 }
+
+// stats the cycle test with whatever parameters you have set. Default of 10 second cyle with 10k cycle limit.
 void Start(){
     HAL_Delay(500);
     int count = 0;
@@ -118,6 +129,7 @@ void Start(){
     }
 }
 
+// sets the delay for how long the motor extends. Default or 5 seconds
 void Push(){
   HAL_Delay(500);
   TIM2->CNT=0;
@@ -125,12 +137,13 @@ void Push(){
               push = ((TIM2->CNT)/4)*100;
               char str[80];
               LCD_Send_String_On_Line1("set push timer");
-              sprintf(str, "timer = %u ms", push);
+              sprintf(str, "timer = %lu ms", push);
               LCD_Send_String_On_Line2(str);
             }
 
 }
 
+// sets the delay for how long the motor retracts. default of 5.1 seconds (pull should be longer than push to account for gear slippage)
 void Pull(){
   HAL_Delay(500);
   TIM2->CNT=0;
@@ -138,12 +151,13 @@ void Pull(){
               pull = ((TIM2->CNT)/4)*100;
               char str[80];
               LCD_Send_String_On_Line1("set pull timer");
-              sprintf(str, "timer = %u ms", pull);
+              sprintf(str, "timer = %lu ms", pull);
               LCD_Send_String_On_Line2(str);
             }
 
 }
 
+//function for setting the maximum cycle count (default 10k, though I need to add a default state of infinite as my boss will 100% ask for this)
 void CycleLimit(){
   HAL_Delay(500);
   TIM2->CNT=0;
@@ -151,7 +165,7 @@ void CycleLimit(){
               cyclelimit = ((TIM2->CNT)/4);
               char str[80];
               LCD_Send_String_On_Line1("set cycle limit");
-              sprintf(str, "cycles = %u", cyclelimit);
+              sprintf(str, "cycles = %lu", cyclelimit);
               LCD_Send_String_On_Line2(str);
             }
 
@@ -159,6 +173,7 @@ void CycleLimit(){
 
 
 //this function will cycle the motor once
+//this was for testing and will be removed later
 void CycleTest(){
     HAL_GPIO_WritePin(MOTOR_PORT, MOTOR_PIN_FORWARD, GPIO_PIN_SET);
     LCD_Send_Cmd(LCD_CLEAR_DISPLAY);
@@ -174,7 +189,9 @@ void CycleTest(){
   }
 
 
-// This function will test encoder switch and counter
+// This function will test encoder switch and counter.
+// this function was just for testing and will likely be removed.
+
 void Encoder(){
   int16_t count;
   count=TIM2->CNT;
@@ -196,6 +213,7 @@ void Encoder(){
 
 
 // Function will test direction you are turning the encoder and display it on LCD
+// this function was just for testing and will likely be removed
 void Direction(){
   if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == GPIO_PIN_RESET)  // If the CH1 is RESET
 	  {
@@ -230,32 +248,31 @@ void MOTOR_Init(){
     HAL_GPIO_Init(MOTOR_PORT, &GPIO_InitStruct);
 }
 
-/* void SysTick_Handler(void)
-{
-  HAL_IncTick();
-}
-*/
-
-/*
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  if(GPIO_Pin == (GPIO_B, GPIO_PIN_8)){
-    HAL_GPIO_TogglePin(MOTOR_PORT, MOTOR_PIN_FORWARD | MOTOR_PIN_REVERSE);
-  }
-}
-*/
-
 /* function to read pin state for console */
 int PinState(){
   return HAL_GPIO_ReadPin(MOTOR_PORT, MOTOR_PIN_FORWARD | MOTOR_PIN_REVERSE);
 }
 
+/* */
 int timer(){
   return ((TIM2->CNT)>>2);
 }
 /* function to read cycle count for console */
 int getCycleCount(){
   return cycles;
+}
+
+/* function to send test parameters to console */
+int* getParameters(){
+  
+  //apparently it's important to dynamically allocate memory
+  int *param = (int*) malloc(sizeof(int) * 3);
+
+  *param = cyclelimit;
+  *(param + 1) = push;
+  *(param + 2) = pull;
+   
+  return (param) ;
 }
 
 void SystemClock_Config(void)
@@ -299,28 +316,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-/*
-void EXTI0_IRQHandler(void)
-{
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
-}
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-      if(GPIO_Pin == GPIO_PIN_8) {
-        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8, GPIO_PIN_SET);
-    }
-   
-}
-
-void MX_NVIC_Init(void)
-{
-
-  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-  
-}
-*/
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
