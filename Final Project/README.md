@@ -82,12 +82,14 @@ I'd like to also add persistent data to this either via and SD card or just usin
 
 A different motor driver might also be in my future the H-bridge has approximately a 2V drop across it so they 12V going in as a source is actually only 10V at the motor. This limits the actuators maximum speed which is already not spectacular and while this motor board could support PWM for speed control this setup was so slow that there was really no reason to use PWM as it would only furthur slow the already turtle paced motor. 
 
+There's also one last feature I'd love to add which is to get feedback from the payment device. At the moment this machine exists just to destroy card readers but if I could get the card reader to send any sort of feedback signal I could engage disengage the actuator based on that and fully automate a payments workflow. I several ideas of how to implement that but due to PCI compliance issues on card readers it's something I'd need to work my some of the other engineering teams at my office to accomplish. 
+
 ## Conclusion
 I realized quickly during this course that my initial project idea was way too grandiose considering I have not done much programming since college over a decade ago. I pivoted to this project because it was beneficial to me and my job as well as being something I was familliar with the requirements for so I could focus on learning the tool chains, system architecture, and somedesign process stuff rather than getting way over my head in low level code that I have no real understanding of. My main goal for this course was to figure out how to bridge the gap between exclusively using the arduino ecosystem to working with chips that are more likely to end up in a shipping product as well as just learn what firmware engineers do with boards I hand off to them. 
 
 I definitely feel like I have a significantly better understanding of embedded design as a whole and I love the fact that the code to define a single GPIO pin is longer than the entire arduino sketch I wrote for the original tester here. I also feel like I've finally figured out version control. I never really used GIT before this course other than cloning some Repos but now I don't know how I've lived without this. I've got a very long list of new topics to look into as well as a lot of recommended reference material from everyone. This class has been great and I thank everyone involved with it. 
 
-Grading (self-assessment)
+## Grading (self-assessment)
 | Criteria | Self Grade | Comments |
 |----------|------------|----------|
 |Meets Minimum Goals| 2 | I2C for the LCD, UART for the console, GPIO timer for encoder, and two push buttons between the encoder switch and the on board button as an E-STOP|
@@ -95,3 +97,6 @@ Grading (self-assessment)
 |Clear intentions and working code| 2 | this functions but I look at my code and I'm displeased. I kind of learned how structures should look as I progressed so sometimes I'm naming inputs other times they're just the gpio number. Definitely need to brush up on coding best practices|
 |Reusing code| 2 | all of the CLI code was from the previous porting assignment other than some new commands, the LCD library is one I found. Main and Encoder are my own code|
 |Originality and scope of goals| 1 | honestly it's as bare bones as it gets, I was blown away by other students projects and while I had better initial ideas I just realized early on that I didn't have the time of knowledge of execute them during this course. Though I do think having done this I know where to start now for this bigger projects.
+
+## Video Demo
+https://youtu.be/sdnc3Wkv_rY
