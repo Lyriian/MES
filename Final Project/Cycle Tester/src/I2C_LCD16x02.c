@@ -4,9 +4,6 @@
 /* I2C Handle */
 I2C_HandleTypeDef myI2Chandle;
 
-
-/********************* Private function for I2C initialization *************************/
-
 /* Configure GPIOs */
 static void GPIO_Config(void)
 {
@@ -49,15 +46,7 @@ static void I2C_Config(void)
 	myI2Chandle.Init.OwnAddress2 = 0;
 	HAL_I2C_Init(&myI2Chandle);
 }
-/**********************************************************************************/
 
-
-/********************************* LCD APIs ***************************************/
-/**
- * @brief Send Command to LCD
- * @param cmd : LCD commands 
- * @retval None
- */
 void LCD_Send_Cmd(uint8_t cmd)
 {
 	uint8_t data_u, data_l;
@@ -92,14 +81,6 @@ void LCD_Send_Cmd(uint8_t cmd)
 	HAL_Delay(5);
 }
 
-
-
-
-/**
- * @brief Send Data to LCD
- * @param data: Data to be sent to LCD
- * @retval None
- */
 void LCD_Send_Data(uint8_t data)
 {
 	uint8_t data_u, data_l;
@@ -134,14 +115,6 @@ void LCD_Send_Data(uint8_t data)
     HAL_Delay(5);
 }
 
-
-
-
-
-/**
- * @brief  Initializes LCD
- * @retval None
- */
 void LCD_Init(void)
 {
 	/* Configure GPIOs */
@@ -173,13 +146,6 @@ void LCD_Init(void)
 	
 }
 
-
-
-/**
- * @brief Send Strings to LCD
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String(char *str)
 {
 	while (*str)  
@@ -188,49 +154,24 @@ void LCD_Send_String(char *str)
 	}
 }
 
-
-/**
- * @brief Clears screen first, then displays the given string
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Clear_Then_Display(char *str)
 {
 	LCD_Send_Cmd(LCD_CLEAR_DISPLAY);
 	LCD_Send_String(str);
 }
 
-
-
-/**
- * @brief Display the strings on Line1
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String_On_Line1(char *str)
 {
 	LCD_Send_Cmd(LCD_SET_ROW1_COL1);
 	LCD_Send_String(str);
 }
 
-
-/**
- * @brief Display the strings on Line2
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Send_String_On_Line2(char *str)
 {
 	LCD_Send_Cmd(LCD_SET_ROW2_COL1);
 	LCD_Send_String(str);
 }
 
-
-/**
- * @brief Display long messages of any size on LCD
- * @param str: pointer to strings
- * @retval None
- */
 void LCD_Display_Long_Message(char *string)
 {
 	int i =0, count =1, j=0;
@@ -263,11 +204,6 @@ void LCD_Display_Long_Message(char *string)
 		j++;
 	}
 }
-
-
-/********************************* LCD APIs - END ************************************/
-
-
 
 /*Systick Handler*/
 void SysTick_Handler(void)
