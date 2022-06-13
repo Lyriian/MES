@@ -98,5 +98,5 @@ I definitely feel like I have a significantly better understanding of embedded d
 |Reusing code| 2 | all of the CLI code was from the previous porting assignment other than some new commands, the LCD library is one I found. Main and Encoder are my own code|
 |Originality and scope of goals| 1 | honestly it's as bare bones as it gets, I was blown away by other students projects and while I had better initial ideas I just realized early on that I didn't have the time of knowledge of execute them during this course. Though I do think having done this I know where to start now for this bigger projects.
 
-# [Video Demo](https://youtu.be/Rcu-BktSUHc)
-
+## [Video Demo](https://youtu.be/Rcu-BktSUHc)
+## [Code](https://github.com/Lyriian/MES/tree/main/Final%20Project/Cycle%20Tester)
